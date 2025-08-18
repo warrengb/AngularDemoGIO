@@ -59,7 +59,6 @@ export class HeaderComponent {
     switch (event.name) {
       case "None": this.router.navigate(['/']); this.splash = true; break;
       case "Home": this.router.navigate(['/home']); break;
-      case "Stage": this.router.navigate(['/stage']); break;
       case "Scene": this.router.navigate(['/scene']); break;
       case "Task": this.router.navigate(['/task']); break;
       case "Render": this.router.navigate(['/render']); break;
@@ -77,7 +76,6 @@ export class HeaderComponent {
 
   start() {
     let config: [string, number, Color][] = [
-      ["Stage", 24, new Color(200, 200, 200)],
       ["Scene", 34, new Color(102, 170, 238)],
       ["Task", 34, new Color(48, 126, 127)], 
       ["Render", 26, new Color(160, 197, 68)],

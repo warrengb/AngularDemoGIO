@@ -14,7 +14,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
-import { StageComponent } from './stage/stage.component';
 import { SceneComponent } from './scene/scene.component';
 import { TaskComponent } from './task/task.component';
 import { RenderComponent } from './render/render.component';
@@ -39,7 +38,6 @@ import { ConsoleComponent } from './header/console.component'
     MatIconModule,
     HeaderComponent,
     HomeComponent,
-    StageComponent,
     SceneComponent,
     TaskComponent,
     RenderComponent,
@@ -47,7 +45,6 @@ import { ConsoleComponent } from './header/console.component'
     ConsoleComponent,
     RouterModule.forRoot([
       { path: 'home', component: HomeComponent, data: { animation: 'Home' } },
-      { path: 'stage', component: StageComponent, data: { animation: 'Stage' } },
       { path: 'scene', component: SceneComponent, data: { animation: 'Scene' } },
       { path: 'task', component: TaskComponent, data: { animation: 'Task' } },
       { path: 'render', component: RenderComponent, data: { animation: 'Render' } },

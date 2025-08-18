@@ -19,14 +19,7 @@ export class CubeScene extends Scene {
   cube!: THREE.Mesh;
   ready = false;
   buffer!: HTMLCanvasElement;
-
-  // LIGHTS
-  pointLight1 = new THREE.PointLight(0xffffff, 1.5, 800);
-  pointLight2 = new THREE.PointLight(0xffffff, 1.5, 800);
-  ambientLight = new THREE.AmbientLight(0xE686E6, 1.0);
-  spotLight = new THREE.SpotLight(0x2866EF);
-  directLight = new THREE.DirectionalLight(0xFFFFFF, 1);
-  pointLight = new THREE.PointLight(0xFFFFFF,2);
+  pointLight = new THREE.PointLight(0xFFFFFF);
 
   init() {
     this.camera = new THREE.PerspectiveCamera(75, 2, .1, 5);
@@ -37,14 +30,9 @@ export class CubeScene extends Scene {
 
     this.scene = new THREE.Scene();
     this.scene.background = null;
-    this.directLight.intensity = 100;
-    this.directLight.position.set(1, 0, 1);
-    this.ambientLight.intensity = 100;
-    this.ambientLight.position.set(0, 2, 0);
-      
+    this.pointLight.position.set(1, 2, 4);
+    this.scene.add(this.pointLight);
 
-    this.scene.add(this.directLight);
-    this.scene.add(this.ambientLight);
     const geometry = new THREE.BoxGeometry(.5, .5, .5);
     const loadManager = new THREE.LoadingManager();
     const loader = new THREE.TextureLoader(loadManager);
@@ -58,31 +46,7 @@ export class CubeScene extends Scene {
       this.cube = new THREE.Mesh(geometry, materials);
       this.scene.add(this.cube);
       this.render = new Render(d => this.draw(), this.display, r => this.resize(), false);
-      this.ready = true;
-
-      this.pointLight.position.set(1, 2, 4);
-      this.scene.add(this.pointLight);
-      //this.pointLight.position.set(0, 300, 200);
-
-
-
-
-      //this.spotLight.position.set(-1, 2, 4);
-      //this.spotLight.castShadow = true;
-
-      //this.spotLight.shadow.mapSize.width = 1024;
-      //this.spotLight.shadow.mapSize.height = 1024;
-      //this.spotLight.shadow.camera.near = 500;
-      //this.spotLight.shadow.camera.far = 4000;
-      //this.spotLight.shadow.camera.fov = 30;
-      //this.scene.add(this.spotLight);
-
-      //this.pointLight1.position.set(-1, 2, 4);
-      //this.pointLight2.position.set(-1, 2, 4);
-      //this.scene.add(this.pointLight1);
-      //this.scene.add(this.pointLight2);
-      //this.ambientLight.position.set(-1, 2, 4);
-      //this.scene.add(this.ambientLight);  
+      this.ready = true; 
     };
   }
 

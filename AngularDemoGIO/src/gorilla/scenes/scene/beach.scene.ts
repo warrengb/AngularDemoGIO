@@ -61,14 +61,14 @@ export class BeachScene extends Scene {
       }
 
       this.background.move();
-      yield 50;
+      yield 0;
     }
   }
 
   *enter(): IterableIterator<number> {
     console.log("Beach enter...");
     while (!this.background.ready || !this.player.ready)
-      yield 50;
+      yield 0;
     this.render = new Render(r => this.draw(r), this.display);
   }
 

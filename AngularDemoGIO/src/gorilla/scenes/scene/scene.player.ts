@@ -235,7 +235,7 @@ export class ScenePlayer {
         this.animation.play(ScenePlayer.Animation.Idle);
         return false;
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -249,7 +249,7 @@ export class ScenePlayer {
         this.move = ScenePlayer.Move.None;
         return false;
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -264,7 +264,7 @@ export class ScenePlayer {
         this.hitFrom = ScenePlayer.Hit.None;
         return false;
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -304,7 +304,7 @@ export class ScenePlayer {
           this.animation.play(ScenePlayer.Animation.Run);
           break;
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -341,7 +341,7 @@ export class ScenePlayer {
         case ScenePlayer.Move.None:
           if (!this.decelerate() && this.animation.apex) {
             this.animation.play(ScenePlayer.Animation.Idle);
-            return; 
+            return 0; 
           }
           break;
         case ScenePlayer.Move.Jump:
@@ -353,7 +353,7 @@ export class ScenePlayer {
           this.animation.play(ScenePlayer.Animation.Walk);
           break;
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -399,7 +399,7 @@ export class ScenePlayer {
         if (this.animation.speed > 1.0) this.decelerate(); else
           if (this.animation.speed < 1.0) this.accelerate();
       }
-      yield 50;
+      yield 0;
     }
   }
 
@@ -424,7 +424,7 @@ export class ScenePlayer {
 
   *main(): IterableIterator<number> {
     while (!this.ready) {
-      yield 50;
+      yield 0;
     }
 
     if (this.index == 0)
@@ -453,7 +453,7 @@ export class ScenePlayer {
           yield* this.hurt();
           break;
       }
-      yield 50;
+      yield 0;
     }
   }
 

@@ -1,0 +1,54 @@
+<style>
+  a.material-icons {
+    color: darkgray;
+    font-size: 24px;
+  }
+
+    a.material-icons:hover {
+      color: darkseagreen;
+      font-size: 27px;
+    }
+
+  .spinner:hover {
+    color: green;
+    transition: all 7s ease;
+    transform: rotate(2000deg);
+    -webkit-transform: rotate(2000deg);
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div align="center" style="font-family:'Times New Roman', Times, serif">
+  <h1>
+    Gorilla
+    <a>
+      <img id="gorilla" [@gorillaHover]=gorillaHover width="27" height="40"
+           src='assets/images/gorilla.icon.png'
+           (mouseenter)="gorillaHover='hover'"
+           (mouseleave)="gorillaHover='regular'"
+           (click)="reset()" />
+    </a>
+    IO Demo
+  </h1>
+  <div style="font-size:4px; color:whitesmoke">TICK:{{timer}}</div>
+  <canvas id="pie" width="420" height="420"></canvas>
+</div>
+
+<console name="Pie"></console>
+
+<div *ngIf="splash" align="center">
+  <a class="material-icons spinner" style="font-size:42px;" (click)="fastSplash()">rotate_right</a>
+  <br />
+  <h3>Welcome</h3>
+  <div align="left">
+    <ul>
+      <li>
+        Gorilla IO is software architecture for the development of video games and interactive applications across multimedia platforms and devices.
+      </li>
+      <li>
+        This site built with <a href="https://angular.io/">Angular</a> and Gorilla IO <a href="https://en.wikipedia.org/wiki/TypeScript">TypeScript</a> engine.
+      </li>
+    </ul>
+  </div>
+</div>

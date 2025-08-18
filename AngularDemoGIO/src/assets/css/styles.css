@@ -1,0 +1,28 @@
+body {
+}
+
+p {
+  text-indent: 2.0em;
+  text-align:left;
+  text-align-last: left;
+}
+
+h3 {
+  color: #404080;
+  margin-bottom: -10px;
+}
+
+h4 {
+  color: cornflowerblue;
+  margin-bottom: -10px;
+}
+
+canvas {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  touch-action: none;
+}
+

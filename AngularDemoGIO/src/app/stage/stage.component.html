@@ -1,0 +1,26 @@
+<div align="center" style="font-family:'Times New Roman', Times, serif">
+  <h3>
+    Stage Platform and Service Controller
+  </h3>
+  <p>
+    The Stage is a special service that layers the platform as the services controller.
+    A platform can be any device or software that presents interactive multimedia and gaming applications.
+    Target applications include, Interactive Toys, AI, AR/VR, IoT, 2D/3D, Robotics and UI devices.
+    Devices can be consoles, suchas Nintendo Wii/DS/Switch, Sony Playstation to PC/Mac/Linux to Android, iOS phines and tablets to Arduino.
+    In addition, software platforms such the browser (Edge, Chrome, Safari, FireFox) and gaming development tools (Unit, Unreal) can have stage treatments.
+    Typically the Stage will service the platform specifics such as timing and operation system events then run services in sequence to manage a frame cycle.
+  </p>
+  <img src='assets/images/stage.svg' width="220" height="220" style="margin-top:0px; margin-bottom:0px;" /><br />
+  <img src='assets/images/stage_flow.svg' width="320" height="200" style="margin-top:-30px; margin-bottom:-30px;" />
+  <h3>
+    Services and the Service Agent
+  </h3>
+  <p>
+    A service is a black box that the stage will prompt to process once a frame cycle.
+    Content communicates indirectly to a sevice by service defined content objects, called Agents, aggregated by content Actors.
+    The diagram below depicts a single Agent that is agregated by an Actor and subscribes to a service.
+    The service will prosses the Agent data once every cycle ready to consume by the Actor to update content.
+  </p>
+  <img src='assets/images/service.svg' width="220" height="220" style="margin-top:0px; margin-bottom:0px;" />
+  <img src='assets/images/service_flow.svg' width="420" height="200" style="margin-top:-30px; margin-bottom:-30px;" />
+</div>

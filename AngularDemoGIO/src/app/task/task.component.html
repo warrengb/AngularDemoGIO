@@ -1,0 +1,102 @@
+<div align="center" style="font-family:'Times New Roman', Times, serif">
+  <h2>
+    Task Service
+  </h2>
+  <p>
+    The Task service delivers synergic multitasking to the content system.
+    Content object scripted routines are constructed by stringing these pieces separated by time into a linear procedure.
+    Content code logic has the ability to yield to another task or sleep its own execution in milliseconds.
+    Below illustrates a content Actor aggregated with a Task agent that subscribes to the Task service.
+    Task logic yields to sleep for 0-n ms. Yielding at zero milliseconds guarantees wakeup at next cycle.
+    Task service wakes up Task which then continues with content logic.
+  </p>
+
+  <img src='assets/images/synergic.svg' width="460" height="280" style="margin:-40px 0 -20px" />
+  <p>
+    A Scene will typically incorporate enter, exit and run tasks.
+    The Zoöpraxiscope racing horse activity taken from the main page demontrates task scripting.
+    In addition, a brief game design and sample pseudo script show how tasking simplifies the implementation effort and improves code comprehension.
+  </p>
+  <h3>
+    Game Design
+  </h3>
+  <p>
+    This Zoöpraxiscope game concept demonstrates a premise of the Gorilla IO archecture with the illusion of frame animation.
+    Horse cards are strung together in an infinite strip loop representing each frame of the animation.
+    A movie reel below the strip can be rotated backwards or forward to speed up the strip.
+    Reel movement input is from a mouse hover or touch gesture in a continuous circular motion.
+    When the strip reaches illusion speed, input is disabled and a surpise will display with illusion song sample and horse neighing.
+    After surpise the strip will slow down and elements will restore to play again.
+    Game can be played with or without audio.
+  </p>
+  <div align="left">
+    <b>Game Assets</b>
+    <ul>
+      <li><a href="assets//images/horse/horse.png">horse.png</a> - Horse racer cards for strip animation.</li>
+      <li><a href="assets//images/horse/reel.png">reel.png</a> - Reel sprite to rotate.</li>
+      <li><a href="assets//audio/illusion.mp3">illusion.mp3</a> - Illusion song sample.</li>
+      <li><a href="assets//audio/neigh.wav">neigh.wav</a> - Horse neigh sound.</li>
+      <li><a href="assets//audio/projector.wav">projector.wav</a> - Projector sound.</li>
+    </ul>
+    <b>Psuedo Script</b>
+    <p>
+      Below is a script with task methods enter, run, surprise and exit.
+      A scene will initially execute the enter task until it exits. Line enter 2 yields back to the system for 100 millisenconds unitil assets are fully loaded.
+      A scene will then execute the run task forever as it loops lines 1-4.
+      Line run 3 will excute the surprise task when conditions are met.
+      Line surprise 5 sleeps a half second before playing music at line 6.
+      Line surprise 7 and 11 yield to the system until conditions are met.
+      When surprise task completes, routine exits, then execution resumes at run task line 1.
+    </p>
+    <ul>
+      <li>
+        <b>enter</b>
+        <br /><span style=" color:blue;"><b>1</b></span> begin loading asset resources
+        <br /><span style=" color:blue;"><b>2</b></span> while assets are loading <span style=" color:red;">yield 100</span>
+        <br /><span style=" color:blue;"><b>3</b></span> enable rendering
+      </li>
+      <li>
+        <b>run</b>
+        <br /><b>LOOP 1-4</b>
+        <br /><span style=" color:blue;"><b>1</b></span> if mouse or touch input spin real
+        <br /><span style=" color:blue;"><b>2</b></span> if no input stop real
+        <br /><span style=" color:blue;"><b>3</b></span> if reel reaches max speed <span style=" color:red;">yield surpise</span>
+        <br /><span style=" color:blue;"><b>4</b></span> <span style=" color:red;"> yield</span>
+      </li>
+      <li>
+        <b>surprise</b>
+        <br /><span style=" color:blue;"><b>1</b></span> disable input
+        <br /><span style=" color:blue;"><b>2</b></span> play neigh sound
+        <br /><span style=" color:blue;"><b>3</b></span> lighten strip
+        <br /><span style=" color:blue;"><b>4</b></span> show horse animation
+        <br /><span style=" color:blue;"><b>5</b></span> <span style=" color:red;"> yield 500</span>
+        <br /><span style=" color:blue;"><b>6</b></span> play illusion sample
+        <br /><span style=" color:blue;"><b>7</b></span> while illusion sample is playing <span style=" color:red;">yield</span>
+        <br /><span style=" color:blue;"><b>8</b></span> play neigh sound
+        <br /><span style=" color:blue;"><b>9</b></span> darken strip
+        <br /><span style=" color:blue;"><b>10</b></span> hide horse animation
+        <br /><span style=" color:blue;"><b>11</b></span> while slowing reel is still rotating <span style=" color:red;">yield</span>
+      </li>
+      <li>
+        <b>exit</b>
+        <br /><span style=" color:blue;"><b>1</b></span> disable rendering
+        <br /><span style=" color:blue;"><b>2</b></span> remove asset resources
+      </li>
+    </ul>
+  </div>
+  <div style="font-weight:600; color:coral; font-style:italic;">
+    It's Just an Illusion
+    <span class="material-icons" style="color:darkmagenta; font-size:20px; margin-left:0px;">audiotrack</span> Ah Ha
+    <span class="material-icons" style="color:darkmagenta; font-size:20px; margin-left:0px;">audiotrack</span>
+  </div>
+  <div>
+    <canvas id="horse" width="450" height="270"></canvas>
+    <div align="left"><console  name="Horse"></console></div>
+    <div style="font-weight:600; color:darkslateblue; font-style:italic;">
+      <button *ngIf="!audioOn" (click)="toggleAudio()" class="material-icons" style="outline:none; border:none; background:none; color:lightgray; font-size:24px; margin-left:0px;">volume_off</button>
+      <button *ngIf="audioOn" (click)="toggleAudio()" class="material-icons" style="outline:none; border:none; background: none; color:darkolivegreen; font-size:24px; margin-left:0px;">volume_up</button>
+      Apply circular motion on movie reel to synchronize horse racer animation for 10 seconds for a surpise!
+    </div>
+  </div>
+</div>
+

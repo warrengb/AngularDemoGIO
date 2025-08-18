@@ -1,0 +1,43 @@
+<div align="center" style="font-family:'Times New Roman', Times, serif">
+  <h2>
+    Scene Service
+  </h2>
+  <p>
+    The Scene Service manages scene transitions.
+    A Scene aggregates the image, audio and code resources needed for user activity interactions.
+    Transitions load and unload scenes with enter, exit and run states.
+    Typically the enter task will take many cycles to complete as normally checks all assets are ready before running.
+    Typically the exit task will clean up resources.
+    After the enter task completes the Scene service will launch the run task.
+  </p>
+  <p>
+    While in Beach Scene,  a request is made to the Scene service to activate Woods Scene.
+    The Scene service gives an exit task to the Beach Scene.
+    After the Beach Scene exit task is completed, the Scene service loads the Woods Scene with a enter task.
+    The same steps will occur respectfully when the Woods Scene activates Beach Scene.
+  </p>
+  <div align="center">
+    <img src='assets/images/scene.svg' width="400" height="400" style="margin:-30px 0 -10px 0px" />
+  </div>
+  <h3>
+    Game Design
+  </h3>
+  <p>
+    Below activity demonstrates transition of Beach Scene to Woods Scene and back.
+    Sliding occurs when reversing direction when running.
+    Background animates and scrolls when cat nears screen edge.
+    Click transition button to activate next scene.
+    Alternatively, a more fun way to transition is to Jump off screen.
+    Cat can be controlled by mouse, touch, keyboard or gamepad input.
+    See 'Input' page for input details.
+    The cat can swim in the Beach Scene only.
+  </p>
+
+  <span style="text-transform:capitalize; font-size:x-large; color:darkcyan">{{current?.name}} Scene</span><br />
+  <canvas id="scene" width="480" height="270" style="background-color:aqua; width:480px; height:270px;"></canvas>
+  <br />
+  <div *ngIf="loaded">
+    <button mat-raised-button style="background-color:white; margin-top:8px;" (click)="activate()">Transition to {{next}} Scene</button>
+  </div>
+  <div align="left"><console name="Scene"></console></div>
+</div>

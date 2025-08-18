@@ -1,0 +1,19 @@
+<div class='container'>
+  <div>
+    <app-header></app-header>
+  </div>
+  <router-outlet></router-outlet>
+  <br />
+  <div align="center">
+    <div style="background-color:aliceblue;">
+      <button style="font-size:10px; width:55px;min-width:55px;" mat-button (click)="select('Home')">Home</button>
+      <button style="font-size:10px; width:55px;min-width:55px;" mat-button (click)="select('Stage')">Stage</button>
+      <button style="font-size:10px; width:55px;min-width:55px;" mat-button (click)="select('Scene')">Scene</button>
+      <button style="font-size:10px; width:50px;min-width:50px;" mat-button (click)="select('Task')">Task</button>
+      <button style="font-size:10px; width:60px;min-width:60px;" mat-button (click)="select('Render')">Render</button>
+      <button style="font-size:10px; width:40px;min-width:40px;" mat-button (click)="select('3D')">3D</button>
+    </div>
+    <br />
+    Copyright &copy; 1989-2020 <a href="http://www.gorillacorp.com">Gorilla Systems Corp</a>
+  </div>
+</div>

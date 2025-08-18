@@ -1,0 +1,29 @@
+
+<div style="user-select: none;" *ngIf="!enabled">
+  &nbsp;<a (click)="open()" class="material-icons" style="cursor: pointer;">visibility</a>&nbsp;<span style="vertical-align:7px;  font-size:small;">Console</span>
+</div>
+<div *ngIf="enabled" align="center" style="user-select: none; border-style: solid; border-width: thin; border-color: gray; background-color: lightgray; font-size: small; margin-bottom: 18px">
+  <div style="padding-top:2px; cursor:default;">
+    <span style="float:left; padding-left:4px;cursor:pointer;">
+      <a (click)="close()" class="material-icons">visibility</a>&nbsp;<span style="cursor: default; vertical-align:7px;">Console</span>
+    </span>
+    <a (click)="help()" class="material-icons" style="cursor:help;">info</a>&nbsp;
+    <a (click)="services()" class="material-icons" style="cursor:pointer;">camera</a>&nbsp;
+    <a (click)="clear()" class="material-icons" color="white" style="cursor:pointer;">delete</a>&nbsp;
+    <a (click)="changeColor()" ngDefaultControl class="material-icons" [(ngModel)]="spriteColor" [ngStyle]="{'color':spriteColor}">credit_card</a>&nbsp;
+    <input *ngIf="mode==3" type="number" [(ngModel)]="gridBlock" style="vertical-align: 8px; font-size: 12px; background-color: lightgray; width: 30px; margin-right: 4px; " step="4" min="8" max="80" />
+    <a (click)="grid()" class="material-icons" style="cursor:pointer;">crop_landscape</a>
+    <span style="vertical-align:8px;">{{display.name | titlecase}} {{display.width}}X{{display.height}} <span style="display: inline-block; width:60px;">{{pointer.x|number:'1.0-0'}}:{{pointer.y|number:'1.0-0'}}</span></span>
+    <a *ngIf="!paused" (click)="pause()" class="material-icons" style="cursor: pointer; float: right; padding-right: 2px;">pause</a>
+    <a *ngIf="paused" (click)="resume()" class="material-icons" style="cursor:pointer; float:right; padding-right: 2px;">play_arrow</a>
+  </div>
+  <div #console align="left"
+       style="font-family:Consolas; white-space: pre-line;
+          overflow-y:scroll;height: 200px;
+          background-color:black;color:aliceblue;">
+
+    {{text}}
+  </div>
+</div>
+
+

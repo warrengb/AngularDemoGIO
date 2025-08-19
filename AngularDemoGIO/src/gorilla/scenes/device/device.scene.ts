@@ -87,14 +87,16 @@ export class DeviceScene extends Scene {
     if (y > 7)
       return false;
     let x = Math.abs(this.cat.x - this.dog.x);
-    let w = this.cat.animation.width / 4 + this.dog.animation.width / 4;
+    let wcat = this.cat.animation?.width ?? 0 / 4;
+    let wdog = this.dog.animation?.width ?? 0 / 4;
+    let w = wcat + wdog;
     if (x < w)     
       return true;
     return false;
   }
 
   sliding(pet: ScenePlayer): boolean {
-    return pet.animation.strip == ScenePlayer.Animation.Slide;
+    return pet.animation?.strip == ScenePlayer.Animation.Slide;
   }
 
   scroll(direction: number) {

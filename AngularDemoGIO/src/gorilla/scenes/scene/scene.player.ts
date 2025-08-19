@@ -20,12 +20,12 @@ export class ScenePlayer {
     [[.2, 0], [.2, -.05], [.5, -.05], [.2, .05], [.2, .05], [.3, 0], [.6, 0], [.3, 0], [.2, -.05], [.2, .05]]
   ];
 
-  animation: Animation;
+  animation: Animation | undefined = undefined;
   task = Task.run(this.main());
   backHit: Background.Hit = new Background.Hit();
   hitFrom = ScenePlayer.Hit.None;
-  //writeInput: firebase.database.Reference;
-  //: firebase.database.Reference;
+  //writeInput: firebase.database.Reference = null;
+  //writeData: firebase.database.Reference = null;
   gamepad: XboxController;
   data = new ScenePlayer.Data();
   remote = false;
@@ -39,15 +39,15 @@ export class ScenePlayer {
   set selected(value: boolean) { this._selected = value; }
 
   dropped = false;
- 
-  get x() { return this.animation.x; }
-  set x(value: number) { this.animation.x = value; }
-  get y() { return this.animation.y; }
-  set y(value: number) { this.animation.y = value; }
-  get visible() { return this.animation.visible; }
-  set visible(value: boolean) { this.animation.visible = value; }
 
-  hit(x: number, y: number): boolean { return this.animation.hit(x, y); }
+  get x() { return this.animation?.x??0; }
+  set x(value: number) { if (this.animation) this.animation.x = value; }
+  get y() { return this.animation?.y??0; }
+  set y(value: number) { if (this.animation) this.animation.y = value; }
+  get visible() { return this.animation?.visible??false; }
+  set visible(value: boolean) { if (this.animation) this.animation.visible = value; }
+
+  hit(x: number, y: number): boolean { return this.animation?.hit(x, y)??false; }
 
   moveX = 0;
 
@@ -56,6 +56,8 @@ export class ScenePlayer {
   set multiplayer(value: ScenePlayer.Multiplayer) { this._multiplayer = value; }
 
   draw(display: Display) {
+    if (!this.animation) return;
+    
     this.animation.move(this.moveX);
     this.moveX = 0;
 
@@ -69,7 +71,7 @@ export class ScenePlayer {
     if (this.animation.y > this.STOP_BOTTOM)
       this.animation.y = this.STOP_BOTTOM;
 
-    if (this.animation.strip != ScenePlayer.Animation.Jump){
+    if (this.animation.strip != ScenePlayer.Animation.Jump) {
       if (this.map && this.map.hit(this.x, this.y, this.backHit)) {
         switch (this.backHit.tile.zone.type) {
           case 1:
@@ -83,7 +85,7 @@ export class ScenePlayer {
 
     //if (this.writeData) {
     //  this.writeData.set(this.data.set(this.data.x, this.data.y));
-    //} 
+    //}
 
     this.animation.render(display);
   }
@@ -93,38 +95,38 @@ export class ScenePlayer {
 
   getK0Move(): ScenePlayer.Move {
     let move = ScenePlayer.Move.None;
-    if (Keyboard.down) {     
+    if (Keyboard.down) {
       if (Keyboard.char('Q')) move = ScenePlayer.Move.Stop; else
-      if (Keyboard.char('E')) move = ScenePlayer.Move.Jump; else
-      if (Keyboard.char('A')) move = ScenePlayer.Move.West; else
-      if (Keyboard.char('D')) move = ScenePlayer.Move.East; else
-      if (Keyboard.char('W')) move = ScenePlayer.Move.North; else
-      if (Keyboard.char('S')) move = ScenePlayer.Move.South;
+        if (Keyboard.char('E')) move = ScenePlayer.Move.Jump; else
+          if (Keyboard.char('A')) move = ScenePlayer.Move.West; else
+            if (Keyboard.char('D')) move = ScenePlayer.Move.East; else
+              if (Keyboard.char('W')) move = ScenePlayer.Move.North; else
+                if (Keyboard.char('S')) move = ScenePlayer.Move.South;
     }
     return move;
   }
 
   getK1Move(): ScenePlayer.Move {
-  let move = ScenePlayer.Move.None;
+    let move = ScenePlayer.Move.None;
     if (Keyboard.down) {
-    //if (Keyboard.char('1')) this.hitFrom = ScenePlayer.Hit.Left; else
-    if (Keyboard.char('U')) move = ScenePlayer.Move.Stop; else
-    if (Keyboard.char('O')) move = ScenePlayer.Move.Jump; else
-    if (Keyboard.char('J')) move = ScenePlayer.Move.West; else
-    if (Keyboard.char('L')) move = ScenePlayer.Move.East; else
-    if (Keyboard.char('I')) move = ScenePlayer.Move.North; else
-    if (Keyboard.char('K')) move = ScenePlayer.Move.South;
-  }
-  return move;
+      //if (Keyboard.char('1')) this.hitFrom = ScenePlayer.Hit.Left; else
+      if (Keyboard.char('U')) move = ScenePlayer.Move.Stop; else
+        if (Keyboard.char('O')) move = ScenePlayer.Move.Jump; else
+          if (Keyboard.char('J')) move = ScenePlayer.Move.West; else
+            if (Keyboard.char('L')) move = ScenePlayer.Move.East; else
+              if (Keyboard.char('I')) move = ScenePlayer.Move.North; else
+                if (Keyboard.char('K')) move = ScenePlayer.Move.South;
+    }
+    return move;
   }
 
-  getPad(): ScenePlayer.Move{
+  getPad(): ScenePlayer.Move {
     let move = ScenePlayer.Move.None;
     if (this.gamepad.Up) move = ScenePlayer.Move.North; else
-    if (this.gamepad.Down) move = ScenePlayer.Move.South; else
-    if (this.gamepad.Left) move = ScenePlayer.Move.West; else
-    if (this.gamepad.Right) move = ScenePlayer.Move.East; else
-    if (this.gamepad.LeftBumper || this.gamepad.RightBumper) move = ScenePlayer.Move.Stop;
+      if (this.gamepad.Down) move = ScenePlayer.Move.South; else
+        if (this.gamepad.Left) move = ScenePlayer.Move.West; else
+          if (this.gamepad.Right) move = ScenePlayer.Move.East; else
+            if (this.gamepad.LeftBumper || this.gamepad.RightBumper) move = ScenePlayer.Move.Stop;
     if (this.gamepad.LeftTrigger || this.gamepad.LeftTrigger) move = ScenePlayer.Move.Jump;
     return move;
   }
@@ -143,13 +145,13 @@ export class ScenePlayer {
     if (this.disabled)
       return this.move = ScenePlayer.Move.None;
 
-    //if (this.remote)
-    //  return this.move;
+    if (this.remote)
+      return this.move;
 
-    let move = this.getK0Move();
-    //if (move == ScenePlayer.Move.None) {
-    //  move = this.getPad();
-    //}
+    let move = this.getKMove();
+    if (move == ScenePlayer.Move.None) {
+      move = this.getPad();
+    }
 
     if (move != ScenePlayer.Move.None)
       this.move = move;
@@ -170,11 +172,11 @@ export class ScenePlayer {
   goStop() { if (this.disabled) return; console.log("stop"); this.move = ScenePlayer.Move.Stop; }
 
   action(y: number): boolean {
-      if (y > this.y)
-        this.goStop();
-      else
-        this.goJump();
-      return true;
+    if (y > this.y)
+      this.goStop();
+    else
+      this.goJump();
+    return true;
   }
 
   navigate(x: number, y: number) {
@@ -194,46 +196,52 @@ export class ScenePlayer {
         else
           this.goEast();
       }//SE
-    else
-      if (x < this.x && y > this.y) {
-        if (ylarger)
-          this.goSouth();
-        else
-          this.goWest();
-      }//NW
-    else {
-      if (ylarger)
-        this.goNorth();
       else
-        this.goWest();
-    }//SW
+        if (x < this.x && y > this.y) {
+          if (ylarger)
+            this.goSouth();
+          else
+            this.goWest();
+        }//NW
+        else {
+          if (ylarger)
+            this.goNorth();
+          else
+            this.goWest();
+        }//SW
   }
 
   accelerate(max: number = 1.25): boolean {
-    if (this.animation.speed == max)
-      return false;
-    this.animation.speed += .005;
-    if (this.animation.speed > max)
-      this.animation.speed = max;
+    if (this.animation) {
+      if (this.animation.speed == max)
+        return false;
+      this.animation.speed += .005;
+      if (this.animation.speed > max)
+        this.animation.speed = max;
+    }
     return true;
   }
 
-  decelerate(min:number=.75): boolean {
-    if (this.animation.speed == min)
-      return false;
-    this.animation.speed -= .005;
-    if (this.animation.speed < min)
-      this.animation.speed = min;
+  decelerate(min: number = .75): boolean {
+    if (this.animation) {
+      if (this.animation.speed == min)
+        return false;
+      this.animation.speed -= .005;
+      if (this.animation.speed < min)
+        this.animation.speed = min;
+    }
     return true;
   }
 
   *jump(): IterableIterator<number> {
     while (true) {
-      if (this.animation.strip != ScenePlayer.Animation.Jump) return;
-      if (this.hasHit()) return;
-      if (this.animation.apex) {
-        this.animation.play(ScenePlayer.Animation.Idle);
-        return false;
+      if (this.animation) {
+        if (this.animation.strip != ScenePlayer.Animation.Jump) return;
+        if (this.hasHit()) return;
+        if (this.animation.apex) {
+          this.animation.play(ScenePlayer.Animation.Idle);
+          return false;
+        }
       }
       yield 0;
     }
@@ -241,13 +249,15 @@ export class ScenePlayer {
 
   *slide(): IterableIterator<number> {
     while (true) {
-      if (this.animation.strip != ScenePlayer.Animation.Slide) return;
-      if (this.hasHit()) return;
-      this.decelerate();
-      if (this.animation.apex) {
-        this.animation.play(ScenePlayer.Animation.Idle);
-        this.move = ScenePlayer.Move.None;
-        return false;
+      if (this.animation) {
+        if (this.animation.strip != ScenePlayer.Animation.Slide) return;
+        if (this.hasHit()) return;
+        this.decelerate();
+        if (this.animation.apex) {
+          this.animation.play(ScenePlayer.Animation.Idle);
+          this.move = ScenePlayer.Move.None;
+          return false;
+        }
       }
       yield 0;
     }
@@ -255,22 +265,24 @@ export class ScenePlayer {
 
   *hurt(): IterableIterator<number> {
     while (true) {
-      if (this.animation.strip != ScenePlayer.Animation.Hurt) return;
-      this.decelerate();
-      this.animation.x += this.hitFrom;
-      if (this.animation.apex) {
-        this.animation.play(ScenePlayer.Animation.Idle);
-        this.move = ScenePlayer.Move.None;
-        this.hitFrom = ScenePlayer.Hit.None;
-        return false;
+      if (this.animation) {
+        if (this.animation.strip != ScenePlayer.Animation.Hurt) return;
+        this.decelerate();
+        this.animation.x += this.hitFrom;
+        if (this.animation.apex) {
+          this.animation.play(ScenePlayer.Animation.Idle);
+          this.move = ScenePlayer.Move.None;
+          this.hitFrom = ScenePlayer.Hit.None;
+          return false;
+        }
       }
       yield 0;
     }
   }
 
-  running(direction: Animation.Play = this.animation.direction): boolean {
-    if (this.animation.direction != direction) {
-      this.animation.play(ScenePlayer.Animation.Slide);
+  running(direction: Animation.Play = this.animation?.direction ?? Animation.Play.Stop): boolean {
+    if (this.animation?.direction != direction) {
+      this.animation?.play(ScenePlayer.Animation.Slide);
       return false;
     }
     else {
@@ -281,12 +293,13 @@ export class ScenePlayer {
 
   *run(): IterableIterator<number> {
     while (true) {
+      if (!this.animation) return;
       if (this.animation.strip != ScenePlayer.Animation.Run) return;
       if (this.hasHit()) return;
       switch (this.getMove()) {
         case ScenePlayer.Move.Stop: this.move = ScenePlayer.Move.None; this.animation.play(ScenePlayer.Animation.Idle); return;
         case ScenePlayer.Move.North: this.animation.y -= .15; if (!this.running()) return; break;
-        case ScenePlayer.Move.South: this.animation.y+=.15; if (!this.running()) return; break;
+        case ScenePlayer.Move.South: this.animation.y += .15; if (!this.running()) return; break;
         case ScenePlayer.Move.East: if (!this.running(Animation.Play.Forward)) return; break;
         case ScenePlayer.Move.West: if (!this.running(Animation.Play.Backward)) return; break;
         case ScenePlayer.Move.None:
@@ -308,10 +321,10 @@ export class ScenePlayer {
     }
   }
 
-  get forward() { return this.animation.direction == Animation.Play.Forward; }
+  get forward() { return this.animation?.direction == Animation.Play.Forward; }
 
-  walking(direction: Animation.Play = this.animation.direction): boolean {
-    if (this.animation.direction == direction) {
+  walking(direction: Animation.Play = this.animation?.direction ?? Animation.Play.Stop): boolean {
+    if (this.animation?.direction == direction) {
       this.animation.reverse = false;
       if (!this.accelerate(1.5) && this.animation.apex) {
         this.animation.play(ScenePlayer.Animation.Run, this.animation.mode, .75);
@@ -319,9 +332,9 @@ export class ScenePlayer {
       }
     }
     else {
-      this.animation.reverse = true;
-      if (!this.decelerate() && this.animation.apex) {
-        this.animation.play(ScenePlayer.Animation.Idle, this.animation.mode, 1.25);
+      if(this.animation) this.animation.reverse = true;
+      if (!this.decelerate() && this.animation?.apex) {
+        this.animation?.play(ScenePlayer.Animation.Idle, this.animation.mode, 1.25);
         return false;
       }
     }
@@ -330,18 +343,19 @@ export class ScenePlayer {
 
   *walk(): IterableIterator<number> {
     while (true) {
+      if (this.animation) 
       if (this.animation.strip != ScenePlayer.Animation.Walk) return;
-      if (this.hasHit()) return 0;
-      switch (this.getMove()) {
+      if (this.hasHit()) return;
+      if (this.animation) switch (this.getMove()) {
         case ScenePlayer.Move.Stop: this.move = ScenePlayer.Move.None; this.animation.play(ScenePlayer.Animation.Idle); return;
-        case ScenePlayer.Move.North: this.animation.y-=.08; if (!this.walking()) return; break;
-        case ScenePlayer.Move.South: this.animation.y+=.08; if (!this.walking()) return; break;
+        case ScenePlayer.Move.North: this.animation.y -= .08; if (!this.walking()) return; break;
+        case ScenePlayer.Move.South: this.animation.y += .08; if (!this.walking()) return; break;
         case ScenePlayer.Move.East: if (!this.walking(Animation.Play.Forward)) return; break;
         case ScenePlayer.Move.West: if (!this.walking(Animation.Play.Backward)) return; break;
         case ScenePlayer.Move.None:
           if (!this.decelerate() && this.animation.apex) {
             this.animation.play(ScenePlayer.Animation.Idle);
-            yield 0; 
+            return;
           }
           break;
         case ScenePlayer.Move.Jump:
@@ -353,13 +367,14 @@ export class ScenePlayer {
           this.animation.play(ScenePlayer.Animation.Walk);
           break;
       }
+      
       yield 0;
     }
   }
 
   hasHit(): boolean {
     if (this.hitFrom != ScenePlayer.Hit.None) {
-      this.animation.play(ScenePlayer.Animation.Hurt);
+      this.animation?.play(ScenePlayer.Animation.Hurt);
       return true;
     }
     return false;
@@ -367,18 +382,17 @@ export class ScenePlayer {
 
   *idle(): IterableIterator<number> {
     while (true) {
-      if (this.animation.strip != ScenePlayer.Animation.Idle) return;
-      if (this.hasHit())
-        yield 0;     
+      if (this.animation?.strip != ScenePlayer.Animation.Idle) return;
+      if (this.hasHit()) return;
       let move = this.getMove();
       if (move == ScenePlayer.Move.Stop)
         move = ScenePlayer.Move.None;
-        if (move != ScenePlayer.Move.None) {
+      if (move != ScenePlayer.Move.None) {
         let direction = Animation.Play.Forward;
         let mode = Animation.Mode.Loop;
         switch (move) {
-          case ScenePlayer.Move.North: this.animation.y -=-1; break;
-          case ScenePlayer.Move.South: this.animation.y +=1; break;
+          case ScenePlayer.Move.North: this.animation.y -= -1; break;
+          case ScenePlayer.Move.South: this.animation.y += 1; break;
           case ScenePlayer.Move.East: break;
           case ScenePlayer.Move.West:
             mode |= Animation.Mode.FlipH;
@@ -394,7 +408,7 @@ export class ScenePlayer {
             break;
         }
         this.animation.play(ScenePlayer.Animation.Walk, mode, .75, direction);
-          yield 0;
+        return;
       }
       else {
         if (this.animation.speed > 1.0) this.decelerate(); else
@@ -406,17 +420,17 @@ export class ScenePlayer {
 
   reset() {
     if (this.index == 0) {
-      this.animation.play(ScenePlayer.Animation.Idle);
+      this.animation?.play(ScenePlayer.Animation.Idle);
     }
     else {
-      this.animation.play(ScenePlayer.Animation.Idle, this.animation.mode | Animation.Mode.FlipH);
+      this.animation?.play(ScenePlayer.Animation.Idle, this.animation.mode | Animation.Mode.FlipH);
     }
 
     this.selected = true;
     this.visible = true;
     this.y = 80;
     this.y = 80;
-    this.x = this.index==0?-30:30;
+    this.x = this.index == 0 ? -30 : 30;
     this.remote = false;
     //this.writeInput = null;
     //this.writeData = null;
@@ -429,12 +443,12 @@ export class ScenePlayer {
     }
 
     if (this.index == 0)
-      this.animation.play(ScenePlayer.Animation.Idle);
+      this.animation?.play(ScenePlayer.Animation.Idle);
     else
-      this.animation.play(ScenePlayer.Animation.Idle, this.animation.mode | Animation.Mode.FlipH);
+      this.animation?.play(ScenePlayer.Animation.Idle, this.animation.mode | Animation.Mode.FlipH);
 
     while (true) {
-      switch (this.animation.strip) {
+      switch (this.animation?.strip) {
         case ScenePlayer.Animation.Idle:
           yield* this.idle();
           break;
@@ -458,14 +472,14 @@ export class ScenePlayer {
     }
   }
 
-  get ready() { return this.animation.ready; }
+  get ready() { return this.animation?.ready; }
 
   destroy() {
-    if(this.task)
+    if (this.task)
       this.task.cancel();
   }
 
-  constructor(character: string, private readonly map: Background.Map, readonly index = 0) {
+  constructor(character: string, private readonly map: Background.Map | undefined = undefined, readonly index = 0) {
     this.gamepad = new XboxController(character == "cat" ? Controller.Index.One : Controller.Index.Two);
     this.animation = new Animation(character, ["images", "sprites"], 80, 70, this.strips, this.velocity, 0, 80);
   }
@@ -473,14 +487,14 @@ export class ScenePlayer {
 
 export namespace ScenePlayer {
   export enum Animation {
-    Dead=0,
-    Fall=1,
-    Hurt=2,
-    Idle=3,
-    Jump=4,
-    Run=5,
-    Slide=6,
-    Walk=7
+    Dead = 0,
+    Fall = 1,
+    Hurt = 2,
+    Idle = 3,
+    Jump = 4,
+    Run = 5,
+    Slide = 6,
+    Walk = 7
   }
 
   export enum Move {
@@ -495,8 +509,8 @@ export namespace ScenePlayer {
 
   export enum Hit {
     None,
-    Left=-.3,
-    Right=.3
+    Left = -.3,
+    Right = .3
   }
 
   export enum Multiplayer {
@@ -509,6 +523,6 @@ export namespace ScenePlayer {
 
   export class Data {
     set(x: number, y: number): Data { return this; }
-    constructor(public x: number=0, public y: number=0) { }
+    constructor(public x: number = 0, public y: number = 0) { }
   }
 }

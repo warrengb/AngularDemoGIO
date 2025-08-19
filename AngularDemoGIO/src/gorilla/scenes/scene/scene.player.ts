@@ -143,13 +143,13 @@ export class ScenePlayer {
     if (this.disabled)
       return this.move = ScenePlayer.Move.None;
 
-    if (this.remote)
-      return this.move;
+    //if (this.remote)
+    //  return this.move;
 
-    let move = this.getKMove();
-    if (move == ScenePlayer.Move.None) {
-      move = this.getPad();
-    }
+    let move = this.getK0Move();
+    //if (move == ScenePlayer.Move.None) {
+    //  move = this.getPad();
+    //}
 
     if (move != ScenePlayer.Move.None)
       this.move = move;
@@ -331,7 +331,7 @@ export class ScenePlayer {
   *walk(): IterableIterator<number> {
     while (true) {
       if (this.animation.strip != ScenePlayer.Animation.Walk) return;
-      if (this.hasHit()) return;
+      if (this.hasHit()) return 0;
       switch (this.getMove()) {
         case ScenePlayer.Move.Stop: this.move = ScenePlayer.Move.None; this.animation.play(ScenePlayer.Animation.Idle); return;
         case ScenePlayer.Move.North: this.animation.y-=.08; if (!this.walking()) return; break;
@@ -341,7 +341,7 @@ export class ScenePlayer {
         case ScenePlayer.Move.None:
           if (!this.decelerate() && this.animation.apex) {
             this.animation.play(ScenePlayer.Animation.Idle);
-            return 0; 
+            yield 0; 
           }
           break;
         case ScenePlayer.Move.Jump:
@@ -368,7 +368,8 @@ export class ScenePlayer {
   *idle(): IterableIterator<number> {
     while (true) {
       if (this.animation.strip != ScenePlayer.Animation.Idle) return;
-      if (this.hasHit()) return;     
+      if (this.hasHit())
+        yield 0;     
       let move = this.getMove();
       if (move == ScenePlayer.Move.Stop)
         move = ScenePlayer.Move.None;
@@ -393,7 +394,7 @@ export class ScenePlayer {
             break;
         }
         this.animation.play(ScenePlayer.Animation.Walk, mode, .75, direction);
-        return;
+          yield 0;
       }
       else {
         if (this.animation.speed > 1.0) this.decelerate(); else

@@ -60,8 +60,10 @@ export class Sprite extends Graphic {
 
     if (this.map) {
       this._index = index;
-      this.imageX = this.map[index][0];
-      this.imageY = this.map[index][1];
+      if (this.map[index]) {
+        this.imageX = this.map[index][0];
+        this.imageY = this.map[index][1];
+      }
     }
     else {
       this._index = index;

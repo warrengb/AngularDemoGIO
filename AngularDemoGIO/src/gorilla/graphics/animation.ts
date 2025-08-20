@@ -94,13 +94,13 @@ export class Animation extends Sprite {
   }
 
   override draw(display: Display): void {
-    //if (this.direction && !this.step(display)) {
-    //  if (this.loop) {
-    //    this.time = 0;
-    //    this._cycle++;
-    //  }
-    //  else this.direction = Animation.Play.Stop;
-    //}
+    if (this.direction && !this.step(display)) {
+      if (this.loop) {
+        this.time = 0;
+        this._cycle++;
+      }
+      else this.direction = Animation.Play.Stop;
+    }
     super.draw(display);
   }
 
